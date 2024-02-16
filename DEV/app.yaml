@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: k8s-app-a
-        image: "rajaninandu/app-argocd:22"
+        image: "rajaninandu/app-argocd:23"
         ports:
           - containerPort: 3000
 ---
