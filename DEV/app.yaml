@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: canary-demo-v1
-          image: rajaninandu/app-argocd:16
+          image: rajaninandu/app-argocd:17
           resources:
             requests:
               cpu: "10m" #1% of a core
