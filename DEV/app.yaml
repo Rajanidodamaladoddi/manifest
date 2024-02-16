@@ -1,34 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
-  name: application
-  namespace: dev
+  name: canary-demo-v1-deployment
+  labels:
+    app: canary-demo
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: canary
-  replicas: 2
+      app: canary-demo
+
   template:
     metadata:
       labels:
-        app: canary
+        app: canary-demo
     spec:
       containers:
-      - name: canary
-        image: rajaninandu/app-argocd:16
-        ports:
-        - containerPort: 80
+        - name: canary-demo-v1
+          image: rajaninandu/app-argocd:16
+          resources:
+            requests:
+              cpu: "10m" #1% of a core
+              memory: "150Mi"
+            limits:
+              cpu: "50m" #5% of a core
+              memory: "400Mi"
+          imagePullPolicy: Always
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
+
 metadata:
-  name: canary-app
-  namespace: dev
+  name: canary-service
+  labels:
+    app: canary-demo
 spec:
-  selector:
-    app: canary
   type: NodePort
+  # type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 80
-      nodePort: 32001
+    - port: 80
+      targetPort: 80
+      name: http-port
+      protocol: TCP
+  selector:
+    app: canary-demo
